@@ -32,22 +32,15 @@ app.get('/numbers', async (req, res) => {
   }
 });
 
-async function processResponse(url, result) {
+async function processResponse(url, result) {   
   try {
-    const response = await axios.get(url, { timeout: 500 });
-    if (response.status === 200) {
-      const data = response.data;
-
-      if (Array.isArray(data)) {
-        result.push(...data.filter(Number.isInteger));
-      } else if (typeof data === 'object') {
-        for (const key in data) {
-          if (Number.isInteger(data[key])) {
-            result.push(data[key]);
-          }
-        }
-      }
-    }
+    const response = await axios.get(url, { timeout: 5000 });
+    console.log(response.data.numbers);
+    const uniqueNUms = new Set(response.data.numbers);
+    uniqueNUms.forEach(number=>{
+      result.push(number);
+    })
+    console.log(result);
   } catch (error) {
     console.error(`Error fetching ${url}: ${error.message}`);
   }
